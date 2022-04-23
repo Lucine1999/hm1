@@ -15,8 +15,8 @@ const matrix3 = [
     [1, 2, 3, 4, 5],
     [6, 7, 8, 9, 10],
     [11, 12, 13, 14, 15],
-    [16, 17, 18, 19, 20],
-    [21, 22, 23, 24, 25],
+    [16, 17, 18, 19, 16],
+    [21, 22, 23, 24, 17],
 ];
 
 const rotate90DegreeWithoutDiagonals = (matrix) => {
@@ -25,7 +25,7 @@ const rotate90DegreeWithoutDiagonals = (matrix) => {
 
     matrix.forEach((row, rowIndex) => {
         if (length !== row.length) {
-            throw new RangeError("Incorrect value");
+            throw new TypeError("Matrix is not square");
         }
         const temp = [];
         row.forEach((column, columnIndex) => {
@@ -84,5 +84,5 @@ const rotateWithoutDiagonals = (matrix, deg) => {
         return rotate90DegreeWithoutDiagonals(a);
     }, matrix);
 };
-// console.log(rotate(matrix2, 90));
-// console.log(rotateWithoutDiagonals(matrix3, 270));
+console.log(rotate(matrix2, 90));
+console.log(rotateWithoutDiagonals(matrix3, 270));
