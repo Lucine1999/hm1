@@ -84,5 +84,5 @@ const rotateWithoutDiagonals = (matrix, deg) => {
         return rotate90DegreeWithoutDiagonals(a);
     }, matrix);
 };
-console.log(rotate(matrix2, 90));
-console.log(rotateWithoutDiagonals(matrix3, 270));
+// console.log(rotate(matrix2, 90));
+// console.log(rotateWithoutDiagonals(matrix3, 270));

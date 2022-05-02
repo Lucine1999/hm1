@@ -1,17 +1,27 @@
 ///find///
 
 Array.prototype.arrFind = function (callback, thisArg) {
+    if (typeof callback !== "function") {
+        throw new TypeError("Function isn't given as callback");
+    }
+
     const length = this.length;
     for (let i = 0; i < length; i++) {
         if (callback.call(thisArg, this[i], i, this)) return this[i];
     }
 };
 
+// expected output: 12
+
 ///find///
 
 ///findIndex///
 
 Array.prototype.arrFindIndex = function (callback, thisArg) {
+    if (typeof callback !== "function") {
+        throw new TypeError("Function isn't given as callback");
+    }
+
     const length = this.length;
 
     for (let i = 0; i < length; i++) {
@@ -51,6 +61,10 @@ Array.prototype.arrLastIndexOf = function (item, fromIndex) {
 ///some///
 
 Array.prototype.arrSome = function (callback, thisArg) {
+    if (typeof callback !== "function") {
+        throw new TypeError("Function isn't given as callback");
+    }
+
     const length = this.length;
 
     for (let i = 0; i < length; i++) {
@@ -66,10 +80,14 @@ Array.prototype.arrSome = function (callback, thisArg) {
 ///every///
 
 Array.prototype.arrEvery = function (callback, thisArg) {
+    if (typeof callback !== "function") {
+        throw new TypeError("Function isn't given as callback");
+    }
+
     const length = this.length;
 
     for (let i = 0; i < length; i++) {
-        if (this[i] == null) {
+        if (this.length - 1 < i) {
             break;
         }
         if (!callback.call(thisArg, this[i], i, this)) {
@@ -79,26 +97,40 @@ Array.prototype.arrEvery = function (callback, thisArg) {
     return true;
 };
 
+arr = [1, 2, 3, 4];
+console.log(
+    arr.arrEvery((elem, index, arr) => {
+        arr.pop();
+        console.log(`[${arr}][${index}] -> ${elem}`);
+        return elem < 4;
+    })
+);
+// console.log([null, null].arrEvery((e) => e !== null));
+
 ///every///
 
 ///reduce///
 
 Array.prototype.arrReduce = function (callback, initialValue) {
+    if (typeof callback !== "function") {
+        throw new TypeError("Function isn't given as callback");
+    }
+
     const length = this.length;
     let result;
 
     if (length === 1) {
-        if (initialValue == null) {
+        if (arguments.length <= 1) {
             return this[0];
         }
     } else if (length === 0) {
-        if (initialValue !== undefined) {
-            return initialValue;
-        } else {
+        if (arguments.length <= 1) {
             throw new TypeError("Reduce of empty array with no initial value");
+        } else {
+            return initialValue;
         }
     }
-    if (initialValue == null) {
+    if (arguments.length <= 1) {
         result = this[0];
     } else {
         result = callback(initialValue, this[0], 0, this);
@@ -115,21 +147,26 @@ Array.prototype.arrReduce = function (callback, initialValue) {
 ///reduceRight///
 
 Array.prototype.arrReduceRight = function (callback, initialValue) {
+    if (typeof callback !== "function") {
+        throw new TypeError("Function isn't given as callback");
+    }
+
     const length = this.length;
     let result;
 
     if (length === 1) {
-        if (initialValue == null) {
+        if (arguments.length <= 1) {
             return this[0];
         }
     } else if (length === 0) {
-        if (initialValue !== undefined) {
-            return initialValue;
-        } else {
+        if (arguments.length <= 1) {
             throw new TypeError("Reduce of empty array with no initial value");
+        } else {
+            return initialValue;
         }
     }
-    if (initialValue == null) {
+
+    if (arguments.length <= 1) {
         result = this[length - 1];
     } else {
         result = callback(initialValue, this[length - 1], length - 1, this);
@@ -153,17 +190,16 @@ Array.prototype.arrJoin = function (symbol = ",") {
     }
 
     let result = "";
-    let separator = "";
+
     if (length === 1) {
-        return this[0];
+        return String(this[0]);
     }
 
     for (let i = 0; i < length; i++) {
         if (this[i] == null) {
             this[i] = "";
         }
-        result += separator + this[i];
-        separator = symbol;
+        result += (i === 0 ? "" : symbol) + this[i];
     }
 
     return result;
@@ -181,12 +217,8 @@ Array.prototype.arrPop = function () {
     }
     const lastElem = this[length - 1];
 
-    if (Array.isArray(this)) {
-        this.splice(-1);
-    } else {
-        delete this[length - 1];
-        this.length -= 1;
-    }
+    delete this[length - 1];
+    this.length -= 1;
 
     return lastElem;
 };
